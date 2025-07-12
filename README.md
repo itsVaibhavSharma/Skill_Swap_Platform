@@ -101,8 +101,3 @@ For detailed backend implementation, refer to the provided Flask code.
 - Enhance admin dashboard with detailed analytics. 📊
 - Support additional file types for skill-related resources. 📁
 
-## Contributing 🤗
-Contributions are welcome! Please submit a pull request or open an issue for any bugs, features, or improvements.
-
-## License 📜
-This project is licensed under the MIT License.
