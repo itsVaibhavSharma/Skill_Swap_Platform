@@ -112,13 +112,15 @@ const SwapManager = ({ token, user }) => {
         <div className="grid md:grid-cols-2 gap-4 mb-4">
           <div className="p-3 bg-green-50 rounded-lg">
             <h4 className="font-medium text-green-800 mb-1">
-              {type === 'sent' ? 'You offered' : 'They want'}
+              {/* {type === 'sent' ?  'They want': 'They offered'} */}
+               {type === 'sent' ?  'You offered': 'They offered'}
             </h4>
             <p className="text-green-700">{swap.skill_offered}</p>
           </div>
           <div className="p-3 bg-blue-50 rounded-lg">
             <h4 className="font-medium text-blue-800 mb-1">
-              {type === 'sent' ? 'You wanted' : 'They offered'}
+              {/* {type === 'sent' ?  'They offered': 'You offered'} */}
+              {type === 'sent' ?  'You want': 'They want'}
             </h4>
             <p className="text-blue-700">{swap.skill_wanted}</p>
           </div>

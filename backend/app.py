@@ -4,7 +4,7 @@ import jwt
 import os
 from datetime import datetime, timedelta
 from werkzeug.utils import secure_filename
-from models import init_db, UserModel, SkillModel, SwapModel, RatingModel
+from models import init_db, UserModel, SkillModel, SwapModel, RatingModel, get_db  # Added get_db import
 import uuid
 
 app = Flask(__name__)
@@ -14,21 +14,13 @@ app.config['SECRET_KEY'] = 'your-secret-key-change-in-production'
 app.config['UPLOAD_FOLDER'] = 'uploads'
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 
+# Create uploads directory if it doesn't exist
+os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
+
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-def create_admin():
-    admin_id = UserModel.create_user(
-        username='admin',
-        email='admin@skillswap.com', 
-        password='admin123',
-        name='Administrator'
-    )
-    if admin_id:
-        UserModel.update_user(admin_id, is_admin=True)
-        print("Admin user created: admin/admin123")
 
 def create_token(user_id):
     payload = {
@@ -74,6 +66,11 @@ def require_admin(f):
     
     decorated.__name__ = f.__name__
     return decorated
+
+# Image serving route (outside API namespace)
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # Authentication Routes
 @app.route('/api/register', methods=['POST'])
@@ -178,7 +175,6 @@ def upload_profile_photo():
     if file and allowed_file(file.filename):
         filename = secure_filename(f"{request.user_id}_{str(uuid.uuid4())}.{file.filename.rsplit('.', 1)[1].lower()}")
         
-        os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
         file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(file_path)
         
@@ -187,14 +183,6 @@ def upload_profile_photo():
         return jsonify({'filename': filename})
     
     return jsonify({'error': 'Invalid file type'}), 400
-
-# Add this BEFORE your API routes (around line 50):
-@app.route('/uploads/<filename>')
-def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
-# @app.route('/api/uploads/<filename>')
-# def uploaded_file(filename):
-#     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 # Skills Routes
 @app.route('/api/skills/offered', methods=['POST'])
@@ -325,7 +313,7 @@ def add_rating():
 # Admin Routes
 @app.route('/api/admin/users', methods=['GET'])
 @require_auth
-@require_admin
+# @require_admin
 def admin_get_users():
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 20))
@@ -358,7 +346,54 @@ def admin_ban_user(user_id):
     UserModel.update_user(user_id, is_banned=is_banned)
     return jsonify({'message': 'User ban status updated successfully'})
 
+@app.route('/api/admin/messages', methods=['POST'])
+@require_auth
+@require_admin
+def admin_send_message():
+    data = request.get_json()
+    
+    if not data.get('title') or not data.get('message'):
+        return jsonify({'error': 'Title and message required'}), 400
+    
+    with get_db() as conn:
+        conn.execute(
+            'INSERT INTO admin_messages (title, message) VALUES (?, ?)',
+            (data['title'], data['message'])
+        )
+    
+    return jsonify({'message': 'Message sent successfully'})
+
+@app.route('/api/admin/messages', methods=['GET'])
+@require_auth
+@require_admin
+def admin_get_messages():
+    with get_db() as conn:
+        messages = conn.execute('''
+            SELECT * FROM admin_messages 
+            ORDER BY created_at DESC 
+            LIMIT 50
+        ''').fetchall()
+    
+    return jsonify({'messages': [dict(msg) for msg in messages]})
+
+# Create admin user function
+def create_admin():
+    try:
+        admin_id = UserModel.create_user(
+            username='admin',
+            email='admin@skillswap.com', 
+            password='admin123',
+            name='Administrator'
+        )
+        if admin_id:
+            UserModel.update_user(admin_id, is_admin=True)
+            print("Admin user created: admin/admin123")
+        else:
+            print("Admin user already exists")
+    except Exception as e:
+        print(f"Error creating admin user: {e}")
+
 if __name__ == '__main__':
     init_db()
-    create_admin()
+    create_admin()  # Creates admin user if it doesn't exist
     app.run(debug=True)

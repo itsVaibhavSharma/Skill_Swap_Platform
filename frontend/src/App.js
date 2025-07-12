@@ -83,6 +83,63 @@ const App = () => {
     </button>
   );
 
+const PlatformMessages = ({ token }) => {
+  const [messages, setMessages] = useState([]);
+  const [showMessages, setShowMessages] = useState(false);
+
+  useEffect(() => {
+    fetchMessages();
+  }, []);
+
+  const fetchMessages = async () => {
+    try {
+      const response = await fetch(`${API_BASE}/admin/messages`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      if (response.ok) {
+        const data = await response.json();
+        setMessages(data.messages.slice(0, 3)); 
+      }
+    } catch (error) {
+      console.error('Failed to fetch messages:', error);
+    }
+  };
+
+  if (messages.length === 0) return null;
+
+  return (
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-4">
+      <button
+        onClick={() => setShowMessages(!showMessages)}
+        className="w-full bg-blue-50 border border-blue-200 rounded-lg p-3 text-blue-700 hover:bg-blue-100 transition-colors flex items-center justify-between"
+      >
+        <span className="flex items-center">
+          📢 Platform Messages ({messages.length})
+        </span>
+        <span>{showMessages ? '▼' : '▶'}</span>
+      </button>
+      
+      {showMessages && (
+        <div className="mt-2 space-y-2">
+          {messages.map(msg => (
+            <div key={msg.id} className="bg-white border border-gray-200 rounded-lg p-4">
+              <div className="flex items-center justify-between mb-1">
+                <h4 className="font-medium text-gray-900">{msg.title}</h4>
+                <span className="text-sm text-gray-500">
+                  {new Date(msg.created_at).toLocaleDateString()}
+                </span>
+              </div>
+              <p className="text-gray-700 text-sm">{msg.message}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
@@ -118,6 +175,7 @@ const App = () => {
       </nav>
 
       {/* Main Content */}
+      {user && <PlatformMessages token={token} />}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'profile' && <Profile token={token} />}
         {activeTab === 'browse' && <SkillBrowser token={token} user={user} />}
