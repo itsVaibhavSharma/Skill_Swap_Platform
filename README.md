@@ -3,6 +3,11 @@
 ## Overview
 The **Skill Swap Platform** is a web application that allows users to exchange skills with one another. Users can list skills they offer, request skills they want to learn, and connect with others to arrange skill swaps. With features like profile management, skill browsing, swap requests, and admin controls, the platform fosters a collaborative community for skill-sharing. 🔄
 
+## Team Members 👥
+- **Vaibhav Sharma** - Team Leader
+- **Akshara Rathore** - Member
+
+
 ### Key Features
 - **User Profiles** 👤: Users can create profiles with name, location (optional), profile photo (optional), and set their profile to public or private.
 - **Skill Management** 🛠️: List skills offered and wanted, with descriptions.
@@ -67,10 +72,6 @@ For detailed backend implementation, refer to the provided Flask code.
 
 
 *Caption*: The user dashboard showing profile details, offered/wanted skills, and swap requests.
-
-## Team Members 👥
-- **Vaibhav Sharma** - Team Leader
-- **Akshara Rathore** - Member
 
 ## Getting Started 🚀
 1. **Clone the Repository**:
