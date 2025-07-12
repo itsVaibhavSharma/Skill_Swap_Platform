@@ -45,25 +45,25 @@ For detailed backend implementation, refer to the provided Flask code.
 
 ## Screenshots 📷
 ![Skill Swap Platform Dashboard](screenshots/i1.png)
-![Skill Search Page](screenshots\i2.jpg)
+![Skill Search Page](screenshots/i2.jpg)
 
-![Admin Dashboard](screenshots\i3.jpg)
+![Admin Dashboard](screenshots/i3.jpg)
 
-![Additional Screenshot 2](screenshots\i4.jpg)
+![Additional Screenshot 2](screenshots/i4.jpg)
 
-![Additional Screenshot 2](screenshots\i5.jpg)![Additional Screenshot 2](screenshots\i6.jpg)
+![Additional Screenshot 2](screenshots/i5.jpg)![Additional Screenshot 2](screenshots/i6.jpg)
 
 
 
-![Additional Screenshot 2](screenshots\i7.jpg)![Additional Screenshot 2](screenshots\i8.jpg)![Additional Screenshot 2](screenshots\i9.jpg)
-![Additional Screenshot 2](screenshots\i10.jpg)
-![Additional Screenshot 2](screenshots\i11.jpg)
+![Additional Screenshot 2](screenshots/i7.jpg)![Additional Screenshot 2](screenshots/i8.jpg)![Additional Screenshot 2](screenshots/i9.jpg)
+![Additional Screenshot 2](screenshots/i10.jpg)
+![Additional Screenshot 2](screenshots/i11.jpg)
 
-![Additional Screenshot 2](screenshots\i12.jpg)
-![Additional Screenshot 2](screenshots\i13.jpg)
-![Additional Screenshot 2](screenshots\i14.jpg)
-![Additional Screenshot 2](screenshots\i15.jpg)
-![Additional Screenshot 2](screenshots\i16.jpg)
+![Additional Screenshot 2](screenshots/i12.jpg)
+![Additional Screenshot 2](screenshots/i13.jpg)
+![Additional Screenshot 2](screenshots/i14.jpg)
+![Additional Screenshot 2](screenshots/i15.jpg)
+![Additional Screenshot 2](screenshots/i16.jpg)
 
 
 *Caption*: The user dashboard showing profile details, offered/wanted skills, and swap requests.
